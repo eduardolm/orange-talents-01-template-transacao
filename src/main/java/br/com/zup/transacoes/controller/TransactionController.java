@@ -2,9 +2,10 @@ package br.com.zup.transacoes.controller;
 
 import br.com.zup.transacoes.dto.request.TransactionMessageRequestDto;
 import br.com.zup.transacoes.dto.response.TransactionDetailsDto;
+import br.com.zup.transacoes.repository.CreditCardRepository;
 import br.com.zup.transacoes.repository.TransactionRepository;
-import br.com.zup.transacoes.service.CreditCardService;
 import br.com.zup.transacoes.service.RequestCreditCard;
+import feign.FeignException;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import org.slf4j.Logger;
@@ -14,19 +15,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.ws.rs.PathParam;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/transactions")
-public class TransactionController extends CreditCardService {
+public class TransactionController {
+
+    @Autowired
+    private CreditCardRepository creditCardRepository;
 
     @Autowired
     private RequestCreditCard request;
 
     @Autowired
-    private TransactionRepository repository;
+    private TransactionRepository transactionRepository;
 
     private final Tracer tracer;
 
@@ -36,41 +39,46 @@ public class TransactionController extends CreditCardService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TransactionController.class);
 
-    @PostMapping
+    @PostMapping("/start")
     public ResponseEntity<?> requestTransactions(@RequestBody
                                                  @Valid TransactionMessageRequestDto transactionMessageRequestDto) {
         LOGGER.info("Solicitando recebimento de transações...");
         Span activeSpan = tracer.activeSpan();
         activeSpan.setTag("tag.transaction.action", "Start receiving messages");
-        var response = request.request(transactionMessageRequestDto);
 
-        return ResponseEntity.ok(response.body());
+        try {
+            request.request(transactionMessageRequestDto);
+            return ResponseEntity.ok().build();
+        }
+        catch (FeignException ex) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> stopTransactions(@PathVariable("id") String id) {
+
         LOGGER.info("Solicitando encerramento do recebimento de transações...");
         Span activeSpan = tracer.activeSpan();
         activeSpan.setTag("tag.transaction.action", "Stop receiving messages");
 
-        var response = checkCreditCardExists(id) == null ? null : request.stopMessageStream(id);
-
-        return response == null ? ResponseEntity.notFound().build() :
-                ResponseEntity.ok().build();
+        return creditCardRepository.findById(id)
+                .map(creditCard -> request.stopMessageStream(creditCard.getId()))
+                .map(response -> ResponseEntity.ok().build())
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping
-    public ResponseEntity<List<?>> findTop10ByCreditCard_IdOrderByCreatedAtDesc(
-            @PathParam(value = "creditCard_Id") String creditCardId) {
+    @GetMapping("/{id}")
+    public ResponseEntity<? extends List<?>> findTop10ByCreditCard_IdOrderByCreatedAtDesc(@PathVariable("id") String id) {
 
-        if (creditCardId == null) {
-            throw new IllegalArgumentException("É obrigatório informar o número do cartão.");
-        }
+        LOGGER.info("Listagem das compras mais recentes: ");
+        Span activeSpan = tracer.activeSpan();
+        activeSpan.setTag("tag.transaction.action", "List recent transactions");
 
-        return checkCreditCardExists(creditCardId) == null ? ResponseEntity.notFound().build() :
-                ResponseEntity.ok(repository.findTop10ByCreditCard_IdOrderByCreatedAtDesc(creditCardId)
-                        .stream()
-                        .map(TransactionDetailsDto::new)
-                        .collect(Collectors.toList()));
+        return creditCardRepository.findById(id)
+                .map(creditCard -> ResponseEntity.ok(
+                        transactionRepository.findTop10ByCreditCard_IdOrderByCreatedAtDesc(creditCard.getId())
+                                .stream().map(TransactionDetailsDto::new).collect(Collectors.toList())))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

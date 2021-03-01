@@ -1,12 +1,13 @@
 package br.com.zup.transacoes.controller;
 
-import br.com.zup.transacoes.builder.CreditCardBuilder;
+import br.com.zup.transacoes.dto.request.TransactionMessageRequestDto;
 import br.com.zup.transacoes.model.CreditCard;
 import br.com.zup.transacoes.model.Store;
 import br.com.zup.transacoes.model.Transaction;
 import br.com.zup.transacoes.repository.CreditCardRepository;
 import br.com.zup.transacoes.repository.TransactionRepository;
-import org.junit.jupiter.api.BeforeEach;
+import br.com.zup.transacoes.service.RequestCreditCard;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -36,28 +37,16 @@ public class TransactionControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private TransactionController controller;
-
-    @MockBean
     private CreditCardRepository creditCardRepository;
 
     @MockBean
     private TransactionRepository transactionRepository;
 
-    private CreditCard creditCard;
+    @MockBean
+    private RequestCreditCard request;
 
-    @BeforeEach
-    public void setup() {
-        CreditCard creditCard = new CreditCardBuilder()
-                .withId("b0012b90-42c8-40e6-903b-64acb3aa649b")
-                .withEmail("test@email.com")
-                .build();
-
-        this.creditCard = creditCard;
-
-        when(creditCardRepository.findById("b0012b90-42c8-40e6-903b-64acb3aa649b"))
-                .thenReturn(Optional.ofNullable(creditCard));
-    }
+    @Autowired
+    private ObjectMapper mapper;
 
     @Test
     public void testFindTop10ByCreditCard_IdOrderByCreatedAtDesc() throws Exception {
@@ -85,8 +74,7 @@ public class TransactionControllerTest {
         Optional<CreditCard> ofResult = Optional.of(creditCard1);
         when(this.creditCardRepository.findById(anyString())).thenReturn(ofResult);
 
-        mockMvc.perform(get("/api/transactions")
-                .param("creditCardId", "foo")
+        mockMvc.perform(get("/api/transactions/{id}", "foo")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -98,10 +86,40 @@ public class TransactionControllerTest {
 
         when(this.creditCardRepository.findById(anyString())).thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/api/transactions")
-                .param("creditCardId", "foo")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+        var response = mockMvc.perform(get("/api/transactions/{id}", "foo")
+                .contentType(MediaType.APPLICATION_JSON));
+
+        verify(this.creditCardRepository).findById(anyString());
+
+        response.andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testFindTop10ByCreditCard_IdOrderByCreatedAtDescWhenIdIsBlank() throws Exception {
+        when(this.transactionRepository.findTop10ByCreditCard_IdOrderByCreatedAtDesc(anyString()))
+                .thenReturn(new ArrayList<>());
+
+        when(this.creditCardRepository.findById(anyString())).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/api/transactions/{id}", "")
+                .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testRequestTransactions() throws Exception {
+
+        TransactionMessageRequestDto transactionMessageRequestDto =
+                new TransactionMessageRequestDto("1234", "test@email.com");
+
+        when(request.request(transactionMessageRequestDto)).thenReturn(null);
+
+        var response = mockMvc.perform(post("/api/transactions/start")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(transactionMessageRequestDto)));
+
+        verify(this.request).request(transactionMessageRequestDto);
+
+        response.andExpect(status().isOk());
     }
 }
 
