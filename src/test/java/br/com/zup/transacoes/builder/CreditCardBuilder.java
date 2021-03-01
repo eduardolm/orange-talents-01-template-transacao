@@ -2,9 +2,7 @@ package br.com.zup.transacoes.builder;
 
 import br.com.zup.transacoes.model.CreditCard;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import java.util.UUID;
 
 public class CreditCardBuilder {
 
