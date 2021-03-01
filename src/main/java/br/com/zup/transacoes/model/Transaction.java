@@ -10,7 +10,7 @@ import java.util.UUID;
 public class Transaction {
 
     @Id
-    private UUID id;
+    private String id;
     private BigDecimal amount;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -25,7 +25,7 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(UUID id, BigDecimal valor, Store estabelecimento, CreditCard cartao, LocalDateTime efetivadaEm) {
+    public Transaction(String id, BigDecimal valor, Store estabelecimento, CreditCard cartao, LocalDateTime efetivadaEm) {
         this.id = id;
         this.amount = valor;
         this.store = estabelecimento;
@@ -33,11 +33,11 @@ public class Transaction {
         this.createdAt = efetivadaEm;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 

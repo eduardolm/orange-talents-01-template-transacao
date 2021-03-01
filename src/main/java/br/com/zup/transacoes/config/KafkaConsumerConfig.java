@@ -3,6 +3,7 @@ package br.com.zup.transacoes.config;
 import br.com.zup.transacoes.dto.response.TransactionMessageDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
@@ -18,9 +19,11 @@ import java.util.Map;
 @Configuration
 public class KafkaConsumerConfig {
 
-    private String bootstrapServerConfig = "http://localhost:9092";
+    @Value("${spring.kafka.consumer.bootstrap-servers}")
+    private String bootstrapServerConfig;
 
-    private String groupId = "transaction_API";
+    @Value("${spring.kafka.consumer.group-id}")
+    private String groupId;
 
     @Bean
     public ConsumerFactory<String, TransactionMessageDto> consumerFactory() {

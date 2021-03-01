@@ -25,7 +25,7 @@ public class TransactionMessageDtoTest {
     public void setup() {
 
         this.creditCard = new CreditCardBuilder()
-                .withId(UUID.fromString("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1"))
+                .withId("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1")
                 .withEmail("test@email.com")
                 .build();
 
@@ -41,7 +41,7 @@ public class TransactionMessageDtoTest {
     @Test
     public void shouldCreateNewTransactionMessageInstanceWithOverloadedConstructor() {
         TransactionMessageDto transactionMessageDto = new TransactionMessageDto(
-                UUID.fromString("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1"), BigDecimal.TEN, store, creditCard,
+                "c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1", BigDecimal.TEN, store, creditCard,
                 LocalDateTime.of(2021, 1, 12, 13, 25, 0));
 
         assertEquals("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1", transactionMessageDto.getId().toString());
@@ -55,7 +55,7 @@ public class TransactionMessageDtoTest {
     @Test
     public void testToModel() {
         TransactionMessageDto transactionMessageDto = new TransactionMessageDto(
-                UUID.fromString("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1"), BigDecimal.TEN, store, creditCard,
+                "c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1", BigDecimal.TEN, store, creditCard,
                 LocalDateTime.of(2021, 1, 12, 13, 25, 0));
 
         Transaction transaction = transactionMessageDto.toModel();
@@ -71,7 +71,7 @@ public class TransactionMessageDtoTest {
     @Test
     public void testToString() {
         TransactionMessageDto transactionMessageDto = new TransactionMessageDto(
-                UUID.fromString("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1"), BigDecimal.TEN, store, creditCard,
+                "c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1", BigDecimal.TEN, store, creditCard,
                 LocalDateTime.of(2021, 1, 12, 13, 25, 0));
 
         assertEquals("TransactionMessageDto{id=c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1, valor=10, " +
@@ -83,11 +83,11 @@ public class TransactionMessageDtoTest {
     @Test
     public void testEquals() {
         TransactionMessageDto transactionMessageDto1 = new TransactionMessageDto(
-                UUID.fromString("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1"), BigDecimal.TEN, store, creditCard,
+                "c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1", BigDecimal.TEN, store, creditCard,
                 LocalDateTime.of(2021, 1, 12, 13, 25, 0));
 
         TransactionMessageDto transactionMessageDto2 = new TransactionMessageDto(
-                UUID.fromString("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1"), BigDecimal.TEN, store, creditCard,
+                "c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1", BigDecimal.TEN, store, creditCard,
                 LocalDateTime.of(2021, 1, 12, 13, 25, 0));
 
         TransactionMessageDto transactionMessageDto3 = new TransactionMessageDto();
@@ -102,11 +102,11 @@ public class TransactionMessageDtoTest {
     @Test
     public void testHashCode() {
         TransactionMessageDto transactionMessageDto1 = new TransactionMessageDto(
-                UUID.fromString("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1"), BigDecimal.TEN, store, creditCard,
+                "c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1", BigDecimal.TEN, store, creditCard,
                 LocalDateTime.of(2021, 1, 12, 13, 25, 0));
 
         TransactionMessageDto transactionMessageDto2 = new TransactionMessageDto(
-                UUID.fromString("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1"), BigDecimal.TEN, store, creditCard,
+                "c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1", BigDecimal.TEN, store, creditCard,
                 LocalDateTime.of(2021, 1, 12, 13, 25, 0));
 
         TransactionMessageDto transactionMessageDto3 = new TransactionMessageDto();

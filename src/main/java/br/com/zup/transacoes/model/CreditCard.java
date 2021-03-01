@@ -14,7 +14,7 @@ import java.util.UUID;
 public class CreditCard {
 
     @Id
-    private UUID id;
+    private String id;
 
     @NotBlank(message = "E-mail é obrigatório.")
     @Email(message = "Formato de e-mail inválido.")
@@ -28,7 +28,7 @@ public class CreditCard {
     public CreditCard() {
     }
 
-    public CreditCard(UUID id,
+    public CreditCard(String id,
                       @NotBlank(message = "E-mail é obrigatório.")
                       @Email(message = "Formato de e-mail inválido.") String email) {
 
@@ -36,7 +36,7 @@ public class CreditCard {
         this.email = email;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 

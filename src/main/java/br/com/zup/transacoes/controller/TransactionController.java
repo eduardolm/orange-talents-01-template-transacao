@@ -35,8 +35,9 @@ public class TransactionController extends CreditCardService {
         LOGGER.info("Solicitando recebimento de transações...");
         Span activeSpan = tracer.activeSpan();
         activeSpan.setTag("tag.transaction.action", "Start receiving messages");
+        var response = request.request(transactionMessageRequestDto);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(response.body());
     }
 
     @DeleteMapping("{id}")

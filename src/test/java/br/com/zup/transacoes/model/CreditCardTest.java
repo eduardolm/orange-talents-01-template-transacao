@@ -18,27 +18,19 @@ public class CreditCardTest {
     @Test
     public void shouldCreateCreditCardInstanceOverloadedConstructor() {
         CreditCard creditCard = new CreditCardBuilder()
-                .withId(UUID.fromString("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1"))
+                .withId("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1")
                 .withEmail("test@email.com")
                 .build();
 
-        assertEquals("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1", creditCard.getId().toString());
+        assertEquals("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1", creditCard.getId());
         assertEquals("test@email.com", creditCard.getEmail());
         assertEquals(0, creditCard.getTransactions().size());
     }
 
     @Test
-    public void shouldThrowIllegalArgumentExceptionWhenIdIsBlank() {
-        assertThrows(IllegalArgumentException.class, () -> new CreditCardBuilder()
-                .withId(UUID.fromString(""))
-                .withEmail("test@email.com")
-                .build());
-    }
-
-    @Test
     public void testToString() {
         CreditCard creditCard = new CreditCardBuilder()
-                .withId(UUID.fromString("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1"))
+                .withId("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1")
                 .withEmail("test@email.com")
                 .build();
 
@@ -56,12 +48,12 @@ public class CreditCardTest {
     @Test
     public void testEquals2() {
         CreditCard creditCard1 = new CreditCardBuilder()
-                .withId(UUID.fromString("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1"))
+                .withId("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1")
                 .withEmail("test@email.com")
                 .build();
 
         CreditCard creditCard2 = new CreditCardBuilder()
-                .withId(UUID.fromString("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1"))
+                .withId("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1")
                 .withEmail("test@email.com")
                 .build();
 
@@ -71,12 +63,12 @@ public class CreditCardTest {
     @Test
     public void testHashCode() {
         CreditCard creditCard1 = new CreditCardBuilder()
-                .withId(UUID.fromString("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1"))
+                .withId("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1")
                 .withEmail("test@email.com")
                 .build();
 
         CreditCard creditCard2 = new CreditCardBuilder()
-                .withId(UUID.fromString("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1"))
+                .withId("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1")
                 .withEmail("test@email.com")
                 .build();
 
@@ -92,7 +84,7 @@ public class CreditCardTest {
     @Test
     public void testAddTransaction() {
         CreditCard creditCard = new CreditCardBuilder()
-                .withId(UUID.fromString("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1"))
+                .withId("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1")
                 .withEmail("test@email.com")
                 .build();
 

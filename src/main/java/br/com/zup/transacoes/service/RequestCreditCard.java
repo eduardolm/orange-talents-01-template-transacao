@@ -13,13 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.UUID;
 
 @Service
-@Profile({"test", "dev", "prod"})
-@FeignClient(name = "requestCreditCard", url = "http://localhost:7777")
+@FeignClient(name = "requestCreditCard", url = "${creditcard.request.url}")
 public interface RequestCreditCard {
 
     @PostMapping("/api/cartoes")
-    void request(@RequestBody TransactionMessageRequestDto requestDto);
+    Response request(@RequestBody TransactionMessageRequestDto requestDto);
 
     @DeleteMapping("/api/cartoes/{id}")
-    Response stopMessageStream(@PathVariable("id")UUID id);
+    Response stopMessageStream(@PathVariable("id") UUID id);
 }

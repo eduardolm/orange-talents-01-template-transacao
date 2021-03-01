@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class TransactionBuilder {
 
-    private UUID id = UUID.randomUUID();
+    private String id = UUID.randomUUID().toString();
     private BigDecimal amount;
     private Store store;
     private CreditCard creditCard;

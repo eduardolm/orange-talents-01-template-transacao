@@ -9,13 +9,13 @@ import java.util.UUID;
 
 public class TransactionMessageDto {
 
-    private UUID id;
+    private String id;
     private BigDecimal valor;
     private StoreMessageResponseDto estabelecimento;
     private CreditCard cartao;
     private LocalDateTime efetivadaEm;
 
-    public TransactionMessageDto(UUID id, BigDecimal valor, StoreMessageResponseDto estabelecimento, CreditCard cartao,
+    public TransactionMessageDto(String id, BigDecimal valor, StoreMessageResponseDto estabelecimento, CreditCard cartao,
                                  LocalDateTime efetivadaEm) {
 
         this.id = id;
@@ -29,7 +29,7 @@ public class TransactionMessageDto {
     public TransactionMessageDto() {
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 

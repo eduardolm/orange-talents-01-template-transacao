@@ -24,7 +24,7 @@ public class TransactionTest {
     public void setup() {
 
         this.creditCard = new CreditCardBuilder()
-                .withId(UUID.fromString("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1"))
+                .withId("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1")
                 .withEmail("test@email.com")
                 .build();
 
@@ -46,7 +46,7 @@ public class TransactionTest {
                 .withCreditCard(creditCard)
                 .withCreatedAt(LocalDateTime.of(2021, 01, 12, 13, 25, 00))
                 .build();
-        transaction.setId(UUID.fromString("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1"));
+        transaction.setId("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1");
 
         assertEquals("Levi's", transaction.getStore().getName());
         assertEquals("test@email.com", transaction.getCreditCard().getEmail());
@@ -64,7 +64,7 @@ public class TransactionTest {
                 .withCreditCard(creditCard)
                 .withCreatedAt(LocalDateTime.of(2021, 01, 12, 13, 25, 00))
                 .build();
-        transaction.setId(UUID.fromString("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1"));
+        transaction.setId("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1");
 
         assertEquals("Transaction{id=c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1, " +
                 "amount=10, store=Store{id=1, name='Levi's', city='Orlando', address='18327 Mills Groves, West " +
@@ -82,7 +82,7 @@ public class TransactionTest {
                 .withCreditCard(creditCard)
                 .withCreatedAt(LocalDateTime.of(2021, 01, 12, 13, 25, 00))
                 .build();
-        transaction3.setId(UUID.fromString("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1"));
+        transaction3.setId("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1");
 
         Transaction transaction4 = new TransactionBuilder()
                 .withAmount(BigDecimal.TEN)
@@ -90,7 +90,7 @@ public class TransactionTest {
                 .withCreditCard(creditCard)
                 .withCreatedAt(LocalDateTime.of(2021, 01, 12, 13, 25, 00))
                 .build();
-        transaction4.setId(UUID.fromString("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1"));
+        transaction4.setId("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1");
 
         assertEquals(transaction1, transaction2);
         assertEquals(transaction3, transaction4);
@@ -108,7 +108,7 @@ public class TransactionTest {
                 .withCreditCard(creditCard)
                 .withCreatedAt(LocalDateTime.of(2021, 01, 12, 13, 25, 00))
                 .build();
-        transaction3.setId(UUID.fromString("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1"));
+        transaction3.setId("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1");
 
         Transaction transaction4 = new TransactionBuilder()
                 .withAmount(BigDecimal.TEN)
@@ -116,7 +116,7 @@ public class TransactionTest {
                 .withCreditCard(creditCard)
                 .withCreatedAt(LocalDateTime.of(2021, 01, 12, 13, 25, 00))
                 .build();
-        transaction4.setId(UUID.fromString("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1"));
+        transaction4.setId("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1");
 
         assertEquals(transaction1.hashCode(), transaction2.hashCode());
         assertEquals(transaction3.hashCode(), transaction4.hashCode());

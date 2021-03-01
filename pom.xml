@@ -11,7 +11,7 @@
     <groupId>br.com.zup</groupId>
     <artifactId>transacoes</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>transacoes</name>
+    <name>Transacoes</name>
     <description>Transaction management project for Spring Boot</description>
     <properties>
         <java.version>11</java.version>
@@ -38,14 +38,21 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
+        <!--Kafka        -->
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>connect-json</artifactId>
         </dependency>
+        <!--Kafka        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -55,8 +62,9 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <scope>runtime</scope>
+            <scope>test</scope>
         </dependency>
+        <!--Prometheus e jaeger        -->
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
@@ -67,6 +75,7 @@
             <artifactId>opentracing-spring-jaeger-web-starter</artifactId>
             <version>3.2.2</version>
         </dependency>
+        <!--Prometheus e jaeger        -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -82,11 +91,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka-test</artifactId>
-            <scope>test</scope>
-        </dependency>
+
     </dependencies>
     <dependencyManagement>
         <dependencies>
