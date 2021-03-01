@@ -15,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -28,7 +27,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@ContextConfiguration(classes = {TransactionController.class})
 @ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -91,6 +89,19 @@ public class TransactionControllerTest {
                 .param("creditCardId", "foo")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testFindTop10ByCreditCard_IdOrderByCreatedAtDescWhenIdNotFound() throws Exception {
+        when(this.transactionRepository.findTop10ByCreditCard_IdOrderByCreatedAtDesc(anyString()))
+                .thenReturn(new ArrayList<>());
+
+        when(this.creditCardRepository.findById(anyString())).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/api/transactions")
+                .param("creditCardId", "foo")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }
 

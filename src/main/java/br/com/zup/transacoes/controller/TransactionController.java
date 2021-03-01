@@ -53,8 +53,10 @@ public class TransactionController extends CreditCardService {
         Span activeSpan = tracer.activeSpan();
         activeSpan.setTag("tag.transaction.action", "Stop receiving messages");
 
-        return checkCreditCardExists(id) == null ? ResponseEntity.notFound().build() :
-                ResponseEntity.ok(request.stopMessageStream(id));
+        var response = checkCreditCardExists(id) == null ? null : request.stopMessageStream(id);
+
+        return response == null ? ResponseEntity.notFound().build() :
+                ResponseEntity.ok().build();
     }
 
     @GetMapping
