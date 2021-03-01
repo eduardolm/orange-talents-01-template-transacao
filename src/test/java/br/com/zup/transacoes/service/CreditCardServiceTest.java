@@ -14,7 +14,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -38,13 +37,13 @@ public class CreditCardServiceTest {
                 .withEmail("test@email.com")
                 .build();
 
-        when(creditCardRepository.findById(UUID.fromString("b0012b90-42c8-40e6-903b-64acb3aa649b")))
+        when(creditCardRepository.findById("b0012b90-42c8-40e6-903b-64acb3aa649b"))
                 .thenReturn(Optional.ofNullable(creditCard));
     }
 
     @Test
     public void testCheckCreditCardExists() {
-        CreditCard creditCard = service.checkCreditCardExists(UUID.fromString("b0012b90-42c8-40e6-903b-64acb3aa649b"));
+        CreditCard creditCard = service.checkCreditCardExists("b0012b90-42c8-40e6-903b-64acb3aa649b");
 
         assertNotNull(creditCard);
         assertEquals("b0012b90-42c8-40e6-903b-64acb3aa649b", creditCard.getId());
@@ -53,7 +52,7 @@ public class CreditCardServiceTest {
 
     @Test
     public void shouldReturnNullIfCreditCardNotExists() {
-        CreditCard creditCard = service.checkCreditCardExists(UUID.fromString("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1"));
+        CreditCard creditCard = service.checkCreditCardExists("c63fd0e0-eccb-4af3-9d49-39cde0ffdaf1");
 
         assertNull(creditCard);
     }

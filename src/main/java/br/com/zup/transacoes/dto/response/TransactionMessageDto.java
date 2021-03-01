@@ -5,7 +5,6 @@ import br.com.zup.transacoes.model.Transaction;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 public class TransactionMessageDto {
 

@@ -1,43 +1,30 @@
-package br.com.zup.transacoes.model;
+package br.com.zup.transacoes.dto.response;
 
-import javax.persistence.*;
+import br.com.zup.transacoes.model.CreditCard;
+import br.com.zup.transacoes.model.Store;
+import br.com.zup.transacoes.model.Transaction;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "transacoes")
-public class Transaction {
+public class TransactionDetailsDto {
 
-    @Id
     private String id;
     private BigDecimal amount;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "store_id", referencedColumnName = "id")
     private Store store;
-
-    @ManyToOne
     private CreditCard creditCard;
     private LocalDateTime createdAt;
 
-    @Deprecated
-    public Transaction() {
-    }
-
-    public Transaction(String id, BigDecimal valor, Store estabelecimento, CreditCard cartao, LocalDateTime efetivadaEm) {
-        this.id = id;
-        this.amount = valor;
-        this.store = estabelecimento;
-        this.creditCard = cartao;
-        this.createdAt = efetivadaEm;
+    public TransactionDetailsDto(Transaction transaction) {
+        this.id = transaction.getId();
+        this.amount = transaction.getAmount();
+        this.store = transaction.getStore();
+        this.creditCard = transaction.getCreditCard();
+        this.createdAt = transaction.getCreatedAt();
     }
 
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public BigDecimal getAmount() {
@@ -48,16 +35,8 @@ public class Transaction {
         return store;
     }
 
-    public void setStore(Store store) {
-        this.store = store;
-    }
-
     public CreditCard getCreditCard() {
         return creditCard;
-    }
-
-    public void setCreditCard(CreditCard creditCard) {
-        this.creditCard = creditCard;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -66,8 +45,8 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return "Transaction{" +
-                "id=" + id +
+        return "TransactionDetailsDto{" +
+                "id='" + id + '\'' +
                 ", amount=" + amount +
                 ", store=" + store +
                 ", creditCard=" + creditCard +
@@ -78,9 +57,9 @@ public class Transaction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Transaction)) return false;
+        if (!(o instanceof TransactionDetailsDto)) return false;
 
-        Transaction that = (Transaction) o;
+        TransactionDetailsDto that = (TransactionDetailsDto) o;
 
         if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
         if (getAmount() != null ? !getAmount().equals(that.getAmount()) : that.getAmount() != null) return false;
