@@ -1,13 +1,15 @@
 package br.com.zup.transacoes.controller;
 
+import br.com.zup.transacoes.dto.request.TransactionMessageRequestDto;
 import br.com.zup.transacoes.model.CreditCard;
 import br.com.zup.transacoes.model.Store;
 import br.com.zup.transacoes.model.Transaction;
 import br.com.zup.transacoes.repository.CreditCardRepository;
 import br.com.zup.transacoes.repository.TransactionRepository;
+import br.com.zup.transacoes.service.RequestCreditCard;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,9 +22,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -39,6 +41,12 @@ public class TransactionControllerTest {
 
     @MockBean
     private TransactionRepository transactionRepository;
+
+    @MockBean
+    private RequestCreditCard request;
+
+    @Autowired
+    private ObjectMapper mapper;
 
     @Test
     public void testFindTop10ByCreditCard_IdOrderByCreatedAtDesc() throws Exception {
@@ -81,7 +89,7 @@ public class TransactionControllerTest {
         var response = mockMvc.perform(get("/api/transactions/{id}", "foo")
                 .contentType(MediaType.APPLICATION_JSON));
 
-        Mockito.verify(this.creditCardRepository).findById(anyString());
+        verify(this.creditCardRepository).findById(anyString());
 
         response.andExpect(status().isNotFound());
     }
@@ -95,6 +103,23 @@ public class TransactionControllerTest {
 
         mockMvc.perform(get("/api/transactions/{id}", "")
                 .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testRequestTransactions() throws Exception {
+
+        TransactionMessageRequestDto transactionMessageRequestDto =
+                new TransactionMessageRequestDto("1234", "test@email.com");
+
+        when(request.request(transactionMessageRequestDto)).thenReturn(null);
+
+        var response = mockMvc.perform(post("/api/transactions/start")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(transactionMessageRequestDto)));
+
+        verify(this.request).request(transactionMessageRequestDto);
+
+        response.andExpect(status().isOk());
     }
 }
 

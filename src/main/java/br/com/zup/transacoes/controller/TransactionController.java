@@ -5,6 +5,7 @@ import br.com.zup.transacoes.dto.response.TransactionDetailsDto;
 import br.com.zup.transacoes.repository.CreditCardRepository;
 import br.com.zup.transacoes.repository.TransactionRepository;
 import br.com.zup.transacoes.service.RequestCreditCard;
+import feign.FeignException;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import org.slf4j.Logger;
@@ -23,6 +24,7 @@ public class TransactionController {
 
     @Autowired
     private CreditCardRepository creditCardRepository;
+
     @Autowired
     private RequestCreditCard request;
 
@@ -43,9 +45,14 @@ public class TransactionController {
         LOGGER.info("Solicitando recebimento de transações...");
         Span activeSpan = tracer.activeSpan();
         activeSpan.setTag("tag.transaction.action", "Start receiving messages");
-        var response = request.request(transactionMessageRequestDto);
 
-        return ResponseEntity.ok(response.body());
+        try {
+            request.request(transactionMessageRequestDto);
+            return ResponseEntity.ok().build();
+        }
+        catch (FeignException ex) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @DeleteMapping("/delete/{id}")
